@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Life</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <script src="https://kit.fontawesome.com/4edbd401bc.js"  crossorigin="anonymous"></script> 
+    
+
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+ <header>
+ 
+<%= image_tag 'LOGO.png', class:'LOGO' %>
+
+  <div class="header-list">
+   <ul>
+    <% if user_signed_in? %>
+     <li><%= link_to "ログアウト",destroy_user_session_path, method: :delete %></li>
+     <li><%= link_to "マイページへ", user_path(current_user.id) %></li>
+     <li><%= link_to "新規投稿",new_dog_path %></li>
+     <li><%= link_to "ポーズ紹介",new_dog_path %></li>
+     <li><%= link_to "今日のマインドフルネス",new_dog_path %></li>
+     <li><%= link_to "今週のおすすめ",new_dog_path %></li>
+     <li><%= link_to "診断機能",new_dog_path %></li>
+    <% else %>
+     <li><%= link_to "新規登録", new_user_registration_path %></li>
+     <li><%= link_to "ログイン", new_user_session_path %></li>
+    <% end %>
+    <li><%= link_to "ホーム", dogs_path %></li>
+   </ul>
+  </div>
+ </header>
+ <main>
+  <%= yield %>
+ </main>
+</body>
+</html>

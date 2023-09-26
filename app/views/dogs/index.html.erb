@@ -1,0 +1,310 @@
+<div class="suger">
+
+<h4>Search🔍</h4>
+
+ <%= form_tag({controller:"dogs",action:"index"}, method: :get) do %>
+   <%= text_field_tag :search %>
+   <%= submit_tag '検索する'  %>
+<% end %>
+
+</div>
+
+
+
+<div class="slider">
+        <div class="slider-inner">
+          
+            <div class="slider-item"><%= image_tag 'スライド1.jpg', class:'tea'  %></div>
+            <div class="slider-item"><%= image_tag 'スライド2.jpg', class:'tea'  %></div>
+            <div class="slider-item"><%= image_tag 'スライド3.jpg', class:'tea'  %></div>
+            <div class="slider-item"><%= image_tag 'スライド4.jpg', class:'tea'  %></div>
+        </div>
+    </div>
+</div>
+
+<div class="slide">
+  
+</div>
+
+<div class="box">
+
+<%=image_tag 'はじまり.jpg'%>
+
+<p>About</p>
+<p>ありのままを大切にします。</p>
+<p>Happy Harbs🌿は、ヨガとアロマセラピーを通じて暮らしを調和させ,
+お客様の心と身体にゆとりを提供し、幸せを届けるサイトです。ヨガを通してお体のお悩みを解決し、またヨガのマインドと触れることでマインドフルネスを目指します。ヨガとアロマを日常に取り入れることでひとりでも多くのお客様に元気と幸せをお届けできれば幸いです。</p>
+<p>詳細はこちら</p>
+
+</div>
+
+<div class="spring">
+
+ <div class="summer">
+ <h4>ポーズ一覧</h4>
+ <br>
+ <h4>体の悩みを選択することでおすすめのポーズを紹介します</h4>
+ </div>
+
+
+ <%= image_tag 'ヨガポーズ一覧.jpg', class:'yoga' %>
+ 
+</div>
+
+<div class="spring">
+
+ <div class="sun">
+
+ <%= image_tag 'ヨガ哲学.jpg', class:'yoga' %>
+ 
+ </div>
+
+ <div class="summer">
+ <h4>ヨガ哲学</h4>
+ <br>
+ <h4>一日一ヨガ哲学でマインドフルネスを目指しましょう</h4>
+ </div>
+
+</div>
+
+<div class="spring">
+
+<div class="summer">
+<h4>今週のおすすめ</h4>
+</div>
+
+<%=image_tag '今週.jpg', class:'yoga' %>
+</div>
+
+<div class="spring">
+
+<div class="sun">
+<%=image_tag 'アロマ.jpg', class:'yoga' %>
+</div>
+
+<div class="summer">
+<h4>おすすめのアロマ</h4>
+</div>
+
+</div>
+
+<div class="cat">
+<h4>--記事を探す--</h4>
+</div>
+
+<div class="cloud">
+
+
+
+<div class="pig">
+  <div class="fish">
+<h4>カラダのヨガ</h4>
+  </div>
+
+  <div class="fish">
+<h4>心のヨガ</h4>
+  </div>
+</div>
+
+<div class="pig">
+  <div class="fish">
+<h4>生活のヨガ</h4>
+  </div>
+
+<div class="fish">
+<h4>ヨガについて</h4>
+  </div>
+</div>
+
+<div class="pig">
+  <div class="fish">
+<h4>アロマ一覧</h4>
+</div>
+
+<div class="fish">
+<h4>生活とアロマ</h4>
+  </div>
+</div>
+
+ </div>
+</div>
+
+<div class="cat">
+<h4>--お悩みから検索--</h4>
+</div>
+
+<div class="dogs-container">
+
+<div class="tag">
+
+<%= form_tag({controller:"dogs",action:"index"}, method: :get) do %>
+  <% Tag.all.each do |t| %>
+      <li><%= check_box :tag_ids, t.name %><%= t.name %></li>
+  <% end %>
+  <%= submit_tag '検索' %>
+<% end %>
+
+<%= form_tag({controller:"dogs",action:"index"}, method: :get) do %>
+  <%= text_field_tag :tag %>
+  <%= submit_tag 'タグを追加' %>
+<% end %>
+
+</div>
+
+
+  <% @dogs.each do |t| %>
+    <div class="dog">
+
+     <div class="main-box">
+      <div class="left-container">
+
+       <%= image_tag t.image_url, size: "250x200" if t.image? %>
+
+       <% if t.youtube_url.present? %>
+       <iframe width="560" height="315" src="https://www.youtube.com/embed/<%= find_youtube_url(t.youtube_url) %>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+       <% end %>
+
+
+       <%= t.user.email %>
+       <%= t.body %>
+
+       <% if user_signed_in? %>
+       <% if current_user.already_liked?(t) %>
+       <%= link_to dog_like_path(id: t.id, dog_id: t.id), method: :delete do %>
+       <i class="fas fa-heart"></i><%= t.likes.count %>   
+       <% end %>
+
+       <% else %>
+       <%= link_to dog_likes_path(id: t.id, dog_id: t.id), method: :post do %>
+       <i class="far fa-heart"></i><%= t.likes.count %>
+       <% end %>
+       <% end %>
+
+       <% else %>
+       <i class="far fa-heart"></i><%= t.likes.count %>
+       <% end %>
+     </div>
+
+     <div class="right-container">
+
+      <%= link_to "詳細へ", dog_path(t.id) %> 
+
+      <% if user_signed_in? && current_user.id == t.user_id %>
+      <%= link_to "編集する", edit_dog_path(t.id) %>
+      <%= button_to "削除する", dog_path(t.id), method: :delete %>
+     </div>
+       
+     <% end %> 
+
+     </div>
+      <p class="time"><%= t.created_at %></p>
+     </div>
+     <% end %>
+   </div>
+
+<div class="cat">
+<h4>--あなたのアロマ🌿--</h4>
+</div>
+
+
+<div class="note">
+
+   <!DOCTYPE html> <!--　この文章がHTML文章であることを伝える要素です。-->
+   <html lang="ja"><!--言語の指定-->
+       <head><!--ページに表示されない情報(サイトの裏側の設定)-->
+           <meta charset="utf-8">
+           <title>香水診断スタート</title><!--ブラウザのタブのタイトルを指定-->
+       </head>
+   
+       <body>
+           
+       <h4>  あなたに合うアロマ診断をしてみよう！</h4>
+       <br>
+           <div class="start">
+               <%= link_to "診断を始める！", new_perfume_path, class: "link" %>
+               
+           </div>
+           <br>
+           <br>
+       </body>
+
+  </div>
+  </div>
+
+<div class="cat">
+<h4>--今日のマインドフルネス--</h4>
+</div>
+
+    
+<div class="grass">
+  
+  <%= link_to '今日の一言', new_blog_path %>
+  
+  <%= month_calendar events: @blogs do |date, blogs| %>
+    <%= date.day %>
+  
+    <% blogs.each do |blog| %>
+      <div>
+        <%= link_to blog.title, blog %>
+      </div>
+    <% end %>
+  <% end %>
+
+</div>
+
+<div class="finish">
+
+<div class="word">
+
+<ul>
+    <% if user_signed_in? %>
+     <li><%= link_to "〇ログアウト",new_dog_path %></li>
+     <br>
+     <br>
+     <li><%= link_to "〇マイページへ", user_path(current_user.id) %></li>
+     <br>
+     <br>
+     <li><%= link_to "〇新規投稿",new_dog_path %></li>
+     <br>
+     <br>
+     <li><%= link_to "〇ポーズ紹介",new_dog_path %></li>
+     <br>
+     <br>
+     <li><%= link_to "〇今日のマインドフルネス",new_dog_path %></li>
+     <br>
+     <br>
+     <li><%= link_to "〇今週のおすすめ",new_dog_path %></li>
+     <br>
+     <br>
+     <li><%= link_to "〇診断機能",new_dog_path %></li>
+     <br>
+     <br>
+    <% else %>
+     <li><%= link_to "〇新規登録", new_user_registration_path %></li>
+     <li><%= link_to "〇ログイン", new_user_session_path %></li>
+    <% end %>
+    <li><%= link_to "〇ホーム", dogs_path %></li>
+   </ul>
+</div>
+
+<div class="water">
+
+   <%= image_tag 'LOGO.png', class:'LOGO' %>
+
+</div>
+
+　　
+</div>
+
+
+
+  
+
+  
+
+
+
+
+
+   
+
