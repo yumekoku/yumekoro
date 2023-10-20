@@ -34,14 +34,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px ;
+    padding: 20px;
   }
   header a {
     color: black; 
     text-decoration: none; 
   }
   header h1 {
-    color: black;
+    color: white;
     margin-left: 20px;
   }
   .header-list {
@@ -53,7 +53,7 @@
   }
   header li {
     list-style: none;
-    margin-right: 40px;
+    margin-right: 30px;
   }
 
   input[type="mybutton"] {
